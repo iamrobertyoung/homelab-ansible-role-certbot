@@ -1,0 +1,10 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  vars:
+    certbot_domain: test.example.com
+    certbot_aws_access_key: test-access-key
+    certbot_aws_secret_access_key: test-secret-key
+  roles:
+    - role: robertyoung.certbot
