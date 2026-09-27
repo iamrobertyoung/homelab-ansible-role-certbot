@@ -1,0 +1,4 @@
+---
+scripts:
+  setup: |
+    mise install
