@@ -1,0 +1,13 @@
+---
+# certbot.service runs `docker compose run`; a stub lets the handlers start it without Docker or Route53.
+- name: Prepare
+  hosts: all
+  become: true
+  tasks:
+    - name: Stub docker binary
+      ansible.builtin.copy:
+        dest: /usr/bin/docker
+        mode: "0755"
+        content: |
+          #!/bin/sh
+          exit 0

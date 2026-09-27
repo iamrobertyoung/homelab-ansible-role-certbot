@@ -1,0 +1,58 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check certbot user exists
+      ansible.builtin.getent:
+        database: passwd
+        key: certbot
+
+    - name: Check role files
+      ansible.builtin.stat:
+        path: "{{ item.path }}"
+      register: role_files
+      loop:
+        - {path: /etc/certbot/docker-compose.yml, mode: "0644"}
+        - {path: /etc/certbot/certbot.env, mode: "0400"}
+        - {path: /etc/letsencrypt/cli.ini, mode: "0400"}
+        - {path: /etc/letsencrypt/deploy-hook.sh, mode: "0755"}
+        - {path: /etc/systemd/system/certbot.service, mode: "0644"}
+        - {path: /etc/systemd/system/certbot.timer, mode: "0644"}
+        - {path: /etc/systemd/system/certbot-deploy-hook.path, mode: "0644"}
+        - {path: /etc/systemd/system/certbot-deploy-hook.service, mode: "0644"}
+
+    - name: Assert role files exist with correct permissions
+      ansible.builtin.assert:
+        that:
+          - item.stat.exists
+          - item.stat.mode == item.item.mode
+        fail_msg: "{{ item.item.path }} is missing or has the wrong mode"
+      loop: "{{ role_files.results }}"
+      loop_control:
+        label: "{{ item.item.path }}"
+
+    - name: Read docker compose config
+      ansible.builtin.slurp:
+        src: /etc/certbot/docker-compose.yml
+      register: compose
+
+    - name: Assert docker compose config uses the pinned image
+      ansible.builtin.assert:
+        that:
+          - "'certbot/dns-route53:v3.2.0' in (compose.content | b64decode)"
+
+    - name: Read certbot service unit
+      ansible.builtin.slurp:
+        src: /etc/systemd/system/certbot.service
+      register: service_unit
+
+    - name: Assert certbot service targets the domain
+      ansible.builtin.assert:
+        that:
+          - "'--domains test.example.com' in (service_unit.content | b64decode)"
+
+    - name: Check timer and path units are enabled
+      ansible.builtin.command: systemctl is-enabled certbot.timer certbot-deploy-hook.path
+      changed_when: false

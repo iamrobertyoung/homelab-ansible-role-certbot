@@ -1,5 +1,7 @@
 ---
 galaxy_info:
+  role_name: certbot
+  namespace: robertyoung
   author: RobertYoung
   description: Ansible role for SSL certificate management with Let's Encrypt certbot and AWS Route53 DNS validation
   license: MIT
