@@ -2,7 +2,6 @@
   "branches": [
     "main"
   ],
-  "repositoryUrl": "https://github.com/iamrobertyoung/homelab-ansible-role-certbot",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",

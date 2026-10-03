@@ -29,7 +29,7 @@ Ansible role for automated SSL certificate management using Let's Encrypt certbo
 ### Install via requirements.yml
 
 ```yaml
-- src: git@github.com:RobertYoung/homelab-ansible-role-certbot.git
+- src: git@github.com:iamrobertyoung/homelab-ansible-role-certbot.git
   scm: git
   version: main
   name: certbot
