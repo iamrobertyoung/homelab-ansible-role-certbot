@@ -34,6 +34,8 @@
     group: "{{ certbot_user }}"
     owner: "{{ certbot_user }}"
     mode: "0400"
+  diff: false
+  no_log: true
   notify: "Restart {{ certbot_service_name }}"
 
 - name: Create letsencrypt config directory {{ item }}
