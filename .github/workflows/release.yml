@@ -41,7 +41,7 @@ jobs:
       # fetch-depth: 0 is required for semantic-release to analyze full commit history
       # Action pinned to commit SHA for immutability (security best practice)
       - name: Checkout repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           # Use PAT if you need to trigger other workflows from release commits
@@ -59,7 +59,7 @@ jobs:
       # Configuration is read from .releaserc.json
       # Action pinned to commit SHA for immutability (security best practice)
       - name: Run semantic-release
-        uses: cycjimmy/semantic-release-action@b12c8f6015dc215fe37bc154d4ad456dd3833c90 # v6.0.0
+        uses: cycjimmy/semantic-release-action@ad51787758d9654d5a75150a89a6fa9b3ccef95e # v8.1.4
         env:
           # GITHUB_TOKEN is automatically provided by GitHub Actions
           # It has the permissions specified in the job's permissions block
